@@ -55,16 +55,27 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 try {
-
                     JSONObject jsonObject = new JSONObject(response);
-
                     JSONArray array = jsonObject.getJSONArray("data");
-                    // int s=array.length();
-                    for (int i = 0; i < 7; i++) {
+                    int s = array.length();
+                    for (int i = 0; i < s; i++) {
                         JSONObject jo = array.getJSONObject(i);
-                        PersonList personList = new PersonList(jo.getString("name"), jo.getString("skills"),
-                                jo.getString("image"));
-                        personLists.add(personList);
+                        if (i == 6) i = i + 2;
+                        if (i == 10) i = i + 2;
+                        int id = jo.getInt("id");
+                        String name = jo.getString("name");
+                        String skills = jo.getString("skills");
+                        String image = jo.getString("image");
+
+
+                        if (image.equals("")) {
+                            PersonList personList = new PersonList(name, skills, null);
+                            personLists.add(personList);
+                        } else {
+                            PersonList personList = new PersonList(name, skills, image);
+                            personLists.add(personList);
+                        }
+
                     }
                     adapter = new NameAdapter(personLists, getApplicationContext());
                     recyclerView.setAdapter(adapter);
